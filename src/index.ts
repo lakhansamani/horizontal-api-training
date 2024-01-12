@@ -70,7 +70,6 @@ app.post('/login', (req: Request, res: Response) => {
             email,
             id: user.id,
             sub: user.id,
-            iat: Date.now(),
             'https://hasura.io/jwt/claims': {
               'x-hasura-default-role': 'user',
               'x-hasura-allowed-roles': ['user', 'admin'],
