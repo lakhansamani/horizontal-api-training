@@ -76,6 +76,8 @@ app.post('/login', (req: Request, res: Response) => {
         if (result) {
           res.json({
             token,
+            email,
+            id: user.id,
             message: 'User logged in successfully',
           });
         } else {
