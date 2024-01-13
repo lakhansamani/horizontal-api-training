@@ -47,6 +47,7 @@ app.post('/login', (req: Request, res: Response) => {
   const { email, password } = req.body;
   if (!email || !password) {
     res.status(400).send('Email and password are required');
+    return;
   }
   sql`
         select * from users where email = ${email}
@@ -54,6 +55,7 @@ app.post('/login', (req: Request, res: Response) => {
     .then((users) => {
       if (users.length === 0) {
         res.status(401).send('Invalid email or password');
+        return;
       }
       const user = users[0];
       bcrypt.compare(password, user.password, function (err, result) {
@@ -91,6 +93,7 @@ app.post('/login', (req: Request, res: Response) => {
           });
         } else {
           res.status(401).send('Invalid email or password');
+          return;
         }
       });
     })
