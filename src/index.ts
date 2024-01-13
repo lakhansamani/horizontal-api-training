@@ -46,7 +46,7 @@ app.post('/signup', async (req: Request, res: Response) => {
 app.post('/login', (req: Request, res: Response) => {
   const { email, password } = req.body;
   if (!email || !password) {
-    res.status(400).send('Email and password are required');
+    res.status(400).json({ message: 'Email and password are required' });
     return;
   }
   sql`
@@ -54,14 +54,14 @@ app.post('/login', (req: Request, res: Response) => {
     `
     .then((users) => {
       if (users.length === 0) {
-        res.status(401).send('Invalid email or password');
+        res.status(401).json({ message: 'Invalid email or password' });
         return;
       }
       const user = users[0];
       bcrypt.compare(password, user.password, function (err, result) {
         if (err) {
           console.error('failed to compare password', err);
-          res.status(500).send('Internal Server Error');
+          res.status(500).json({ message: 'Internal Server Error' });
         }
         // generate jwt token using jsonwebtoken
         const privateKey = process.env.PRIVATE_KEY || '';
@@ -92,14 +92,14 @@ app.post('/login', (req: Request, res: Response) => {
             message: 'User logged in successfully',
           });
         } else {
-          res.status(401).send('Invalid email or password');
+          res.status(401).json({ message: 'Invalid email or password' });
           return;
         }
       });
     })
     .catch((err) => {
       console.error('failed to query for user', err);
-      res.status(500).send('Internal Server Error');
+      res.status(500).json({ message: 'Internal Server Error' });
     });
 });
 
