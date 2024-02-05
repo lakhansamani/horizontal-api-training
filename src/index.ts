@@ -110,7 +110,9 @@ app.post('/login', (req: Request, res: Response) => {
 
 app.post('/payment-sheet', async (req, res) => {
   // Use an existing Customer ID if this is a returning customer.
-  const customer = await stripe.customers.create();
+  const customer = {
+    id: 'cus_PVcohYSiDDrvZW',
+  };
   const ephemeralKey = await stripe.ephemeralKeys.create(
     { customer: customer.id },
     { apiVersion: '2023-10-16' }
