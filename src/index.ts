@@ -5,6 +5,11 @@ import cors from 'cors';
 import postgres from 'postgres';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+const stripe = require('stripe')(
+  'sk_test_51ORsjESAtWZWvbEwc4PH1lyEWpHqxbTSJlRvIw3BjlcCCjd9xIUGTwMqI9aiknnMdfFllQ6zFS4KhpxTIF9Fs5oV00Fx0Lpbbh'
+);
+// This example sets up an endpoint using the Express framework.
+// Watch this video to get started: https://youtu.be/rPR2aJ6XnAc.
 
 dotenv.config();
 
@@ -101,6 +106,33 @@ app.post('/login', (req: Request, res: Response) => {
       console.error('failed to query for user', err);
       res.status(500).json({ message: 'Internal Server Error' });
     });
+});
+
+app.post('/payment-sheet', async (req, res) => {
+  // Use an existing Customer ID if this is a returning customer.
+  const customer = await stripe.customers.create();
+  const ephemeralKey = await stripe.ephemeralKeys.create(
+    { customer: customer.id },
+    { apiVersion: '2023-10-16' }
+  );
+  const paymentIntent = await stripe.paymentIntents.create({
+    amount: 1099,
+    currency: 'eur',
+    customer: customer.id,
+    // In the latest version of the API, specifying the `automatic_payment_methods` parameter
+    // is optional because Stripe enables its functionality by default.
+    automatic_payment_methods: {
+      enabled: true,
+    },
+  });
+
+  res.json({
+    paymentIntent: paymentIntent.client_secret,
+    ephemeralKey: ephemeralKey.secret,
+    customer: customer.id,
+    publishableKey:
+      'pk_test_51ORsjESAtWZWvbEwA0ibtP9vtCmSJx6sd8MMcERH3giCxRalbEl7LYfv2dBZLIKfhmVPloOy8miZZCdrjQRlL5Hp00OXyJ3AcQ',
+  });
 });
 
 app.listen(port, () => {
