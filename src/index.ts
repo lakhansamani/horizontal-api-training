@@ -6,7 +6,7 @@ import postgres from 'postgres';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 const stripe = require('stripe')(
-  'sk_test_51ORsjESAtWZWvbEwc4PH1lyEWpHqxbTSJlRvIw3BjlcCCjd9xIUGTwMqI9aiknnMdfFllQ6zFS4KhpxTIF9Fs5oV00Fx0Lpbbh'
+  'sk_test_51OgcQ6IDnGcng56mwTHuEBeIxKZnxXOsqjAHnirRP4Ov81ESel7HCrdsDN1JmTxM1sMz0OHmbCelKKeiuUHETIWW002HyaZ7kf'
 );
 // This example sets up an endpoint using the Express framework.
 // Watch this video to get started: https://youtu.be/rPR2aJ6XnAc.
@@ -111,7 +111,7 @@ app.post('/login', (req: Request, res: Response) => {
 app.post('/payment-sheet', async (req, res) => {
   // Use an existing Customer ID if this is a returning customer.
   const customer = {
-    id: 'cus_PVcohYSiDDrvZW',
+    id: 'cus_PVdjF7Nyyonj2V',
   };
   const ephemeralKey = await stripe.ephemeralKeys.create(
     { customer: customer.id },
