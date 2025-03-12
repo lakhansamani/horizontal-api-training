@@ -6,7 +6,7 @@ import postgres from 'postgres';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 const stripe = require('stripe')(
-  'sk_test_51OgcQ6IDnGcng56mwTHuEBeIxKZnxXOsqjAHnirRP4Ov81ESel7HCrdsDN1JmTxM1sMz0OHmbCelKKeiuUHETIWW002HyaZ7kf'
+  'sk_test_51OgcQ6IDnGcng56mwTHuEBeIxKZnxXOsqjAHnirRP4Ov81ESel7HCrdsDN1JmTxM1sMz0OHmbCelKKeiuUHETIWW002HyaZ7kf',
 );
 // This example sets up an endpoint using the Express framework.
 // Watch this video to get started: https://youtu.be/rPR2aJ6XnAc.
@@ -87,7 +87,7 @@ app.post('/login', (req: Request, res: Response) => {
           {
             algorithm: 'RS256',
             expiresIn: '250h',
-          }
+          },
         );
         if (result) {
           res.json({
@@ -115,7 +115,7 @@ app.post('/payment-sheet', async (req, res) => {
   };
   const ephemeralKey = await stripe.ephemeralKeys.create(
     { customer: customer.id },
-    { apiVersion: '2023-10-16' }
+    { apiVersion: '2023-10-16' },
   );
   const paymentIntent = await stripe.paymentIntents.create({
     amount: 1099,
