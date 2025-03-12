@@ -20,6 +20,12 @@ const sql = postgres(process.env.DATABASE_URL || '');
 app.use(cors());
 app.use(express.json());
 
+const authMiddleware = (req: Request, res: Response, next: any) => {
+  // Incoming jwt token in request header is valid and has not expired
+  // append user id and company id in request object
+  next();
+};
+
 app.get('/', (req: Request, res: Response) => {
   res.send('Express + TypeScript Server');
 });
@@ -107,6 +113,8 @@ app.post('/login', (req: Request, res: Response) => {
       res.status(500).json({ message: 'Internal Server Error' });
     });
 });
+
+app.post('/invoice', authMiddleware, async (req: Request, res: Response) => {});
 
 app.post('/payment-sheet', async (req, res) => {
   // Use an existing Customer ID if this is a returning customer.
